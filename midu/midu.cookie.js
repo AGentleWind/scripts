@@ -2,6 +2,9 @@ const cookieName = '米读'
 const readTimeurlKey = 'senku_readTimeurl_midu'
 const readTimeheaderKey = 'senku_readTimeheader_midu'
 const readTimebodyKey = 'senku_readTimebody_midu'
+const signurlKey = 'senku_signurl_midu'
+const signheaderKey = 'senku_signheader_midu'
+const signbodyKey = 'senku_signbody_midu'
 const senku = init()
 
 const requrl = $request.url
@@ -11,7 +14,6 @@ if ($request && $request.method != 'OPTIONS' && requrl.match(/\/user\/readTimeBa
         const readTimeurlVal = requrl
         const readTimebodyVal = $request.body
         const readTimeheaderVal = JSON.stringify($request.headers)
-        senku.log(readTimebodyVal)
         if (readTimeurlVal && readTimebodyVal && readTimeheaderVal) {
             if (readTimebodyVal.indexOf('EncStr=') > 0) {
                 senku.setdata(readTimeurlVal, readTimeurlKey)
@@ -26,6 +28,22 @@ if ($request && $request.method != 'OPTIONS' && requrl.match(/\/user\/readTimeBa
     }
 }
 
+if ($request && $request.method != 'OPTIONS' && requrl.match(/\/wz\/task\/signInV2/)) {
+    try {
+        const signurlVal = requrl
+        const signbodyVal = $request.body
+        const signheaderVal = JSON.stringify($request.headers)
+        if (signurlVal && signbodyVal && signheaderVal) {
+            senku.setdata(signurlVal, signurlKey)
+            senku.setdata(signheaderVal, signheaderKey)
+            senku.setdata(signbodyVal, signbodyKey)
+            senku.msg(cookieName, `每日签到,获取Cookie: 成功`, ``)
+            senku.log(`🔔${signurlVal},🔔${signheaderVal},🔔${signbodyVal}`)
+        }
+    } catch (error) {
+        senku.log(`❌error:${error}`)
+    }
+}
 function init() {
     isSurge = () => {
         return undefined === this.$httpClient ? false : true

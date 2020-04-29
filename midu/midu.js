@@ -6,21 +6,53 @@ const cookieName = '米读'
 const readTimeurlKey = 'senku_readTimeurl_midu'
 const readTimeheaderKey = 'senku_readTimeheader_midu'
 const readTimebodyKey = 'senku_readTimebody_midu'
+
+const signurlKey = 'senku_signurl_midu'
+const signheaderKey = 'senku_signheader_midu'
+const signbodyKey = 'senku_signbody_midu'
 const senku = init()
+// 阅读
 const readTimeurlVal = senku.getdata(readTimeurlKey)
 const readTimeheaderVal = senku.getdata(readTimeheaderKey)
 const readTimebodyVal = senku.getdata(readTimebodyKey)
+// 签到
+const signurlVal = senku.getdata(signurlKey)
+const signheaderVal = senku.getdata(signheaderKey)
+const signbodyVal = senku.getdata(signbodyKey)
 const signinfo = {}
 let subTitle = ''
 let detail = ''
     ; (sign = async () => {
         senku.log(`🔔 ${cookieName}`)
         await readTime()
-        // showmsg()
+        await sign()
+        showmsg()
         senku.done()
     })().catch((e) => senku.log(`❌ ${cookieName} 签到失败: ${e}`), senku.done())
 
 
+
+
+// 每日签到
+function sign() {
+    return new Promise((resolve, reject) => {
+        const url = { url: signurlVal, headers: JSON.parse(signheaderVal), body: signbodyVal }
+        senku.post(url, (error, response, data) => {
+            try {
+                senku.log(`❕ ${cookieName} sign - response: ${JSON.stringify(response)}`)
+                signinfo.sign = JSON.parse(data)
+                resolve()
+            } catch (e) {
+                senku.msg(cookieName, `签到结果: 失败`, `说明: ${e}`)
+                senku.log(`❌ ${cookieName} sign - 签到失败: ${e}`)
+                senku.log(`❌ ${cookieName} sign - response: ${JSON.stringify(response)}`)
+                resolve()
+            }
+        })
+    })
+}
+
+// 阅读时长
 function readTime() {
     return new Promise((resolve, reject) => {
         const url = { url: readTimeurlVal, headers: JSON.parse(readTimeheaderVal), body: readTimebodyVal }
@@ -58,6 +90,14 @@ function showmsg() {
     subTitle += ''
     detail += ''
 
+    if (signinfo.sign && signinfo.sign.code == 0) {
+        if (signinfo.sign.data) {
+            const amount = signinfo.sign.data.amount
+            const sign_video_amount = signinfo.sign.sign_video_amount
+            const total = amount + sign_video_amount
+            amount == 0 ? detail += `【签到奖励】获得${total}💰\n` : detail += `重复`
+        }
+    } else subTitle += '签到:失败'
     senku.msg(cookieName, subTitle, detail)
     senku.done()
 }
