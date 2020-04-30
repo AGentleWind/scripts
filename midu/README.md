@@ -17,7 +17,8 @@ apiwz.midukanshu.com
 http-request ^https:\/\/apiwz\.midukanshu\.com script-path=https://raw.githubusercontent.com/GideonSenku/scripts/master/midu/midu.cookie.js, requires-body=true
 
 
-cron "10 0 0 * * *" script-path=https://raw.githubusercontent.com/GideonSenku/scripts/master/midu/midu.js
+cron "10 0 0 * * *" script-path=https://raw.githubusercontent.com/GideonSenku/scripts/master/midu/miduSign.js
+cron "*/1 * * * *" script-path=https://raw.githubusercontent.com/GideonSenku/scripts/master/midu/miduRead.js
 ```
 
 ## 配置 (QuanX)
@@ -37,7 +38,8 @@ apiwz.midukanshu.com
 
 
 [task_local]
-*/1 * * * * midu.js
+*/1 * * * * miduRead.js
+0 5 * * * miduSign.js
 ```
 
 ## 说明

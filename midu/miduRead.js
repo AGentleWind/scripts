@@ -5,7 +5,6 @@ const cookieName = '米读阅读时长'
 const readTimebodyKey = 'senku_readTimebody_midu'
 const readTimeheaderKey = 'senku_readTimeheader_midu'
 const senku = init()
-const signbodyVal = senku.getdata(signbodyKey)
 const readTimebodyVal = senku.getdata(readTimebodyKey)
 const readTimeheaderVal = senku.getdata(readTimeheaderKey)
 const readTimeurlVal = 'https://apiwz.midukanshu.com/user/readTimeBase/readTime?' + readTimebodyVal

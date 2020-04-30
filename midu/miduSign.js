@@ -2,13 +2,9 @@
 // 链接`http://html34.qukantoutiao.net/qpr2/bBmQ.html?pid=5eb14518`
 // 农妇山泉 -> 有点咸
 const cookieName = '米读'
-const readTimebodyKey = 'senku_readTimebody_midu'
 const signbodyKey = 'senku_signbody_midu'
-const readTimeheaderKey = 'senku_readTimeheader_midu'
 const senku = init()
 const signbodyVal = senku.getdata(signbodyKey)
-const readTimebodyVal = senku.getdata(readTimebodyKey)
-const readTimeheaderVal = senku.getdata(readTimeheaderKey)
 const readTimeurlVal = 'https://apiwz.midukanshu.com/user/readTimeBase/readTime?' + readTimebodyVal
 const signurlVal = 'https://apiwz.midukanshu.com/wz/task/signInV2?' + signbodyVal
 const signVideourlVal = 'https://apiwz.midukanshu.com/wz/task/signVideoReward?' + signbodyVal
@@ -17,11 +13,9 @@ const dice_roll_urlVal = 'https://apiwz.midukanshu.com/wz/dice/roll?' + signbody
 const dice_double_urlVal = 'https://apiwz.midukanshu.com/wz/dice/doubleReward?' + signbodyVal
 const dice_addnum_urlVal = 'https://apiwz.midukanshu.com/wz/dice/addChangeNumByRewardVideo?' + signbodyVal
 const signinfo = { addnumList: [], rollList: [], doubleList: [] }
-senku.log(`🍎bodyVal${readTimebodyVal}`)
 
     ; (sign = async () => {
         senku.log(`🔔 ${cookieName}`)
-        // await readTime()
         await signDay()
         await signVideo()
         await dice_index()
@@ -74,7 +68,7 @@ function dice_roll() {
         senku.post(url, (error, response, data) => {
             try {
                 senku.log(`❕ ${cookieName} dice_roll - response: ${JSON.stringify(response)}`)
-                signinfo.dice_roll.push(JSON.parse(data))
+                signinfo.rollList.push(JSON.parse(data))
                 resolve()
             } catch (e) {
                 senku.msg(cookieName, `掷骰子: 失败`, `说明: ${e}`)
@@ -96,7 +90,7 @@ function dice_double() {
         senku.post(url, (error, response, data) => {
             try {
                 senku.log(`❕ ${cookieName} dice_double - response: ${JSON.stringify(response)}`)
-                signinfo.dice_double.push(SON.parse(data))
+                signinfo.doubleList.push(SON.parse(data))
                 resolve()
             } catch (e) {
                 senku.msg(cookieName, `骰子双倍奖励: 失败`, `说明: ${e}`)
@@ -118,7 +112,7 @@ function dice_addnum() {
         senku.post(url, (error, response, data) => {
             try {
                 senku.log(`❕ ${cookieName} dice_addnum - response: ${JSON.stringify(response)}`)
-                signinfo.dice_addnum.push(JSON.parse(data))
+                signinfo.addnumList.push(JSON.parse(data))
                 resolve()
             } catch (e) {
                 senku.msg(cookieName, `获取骰子次数: 失败`, `说明: ${e}`)
@@ -174,41 +168,6 @@ function signVideo() {
     })
 }
 
-// 阅读时长
-function readTime() {
-    return new Promise((resolve, reject) => {
-        const url = { url: readTimeurlVal, headers: JSON.parse(readTimeheaderVal) }
-        senku.post(url, (error, response, data) => {
-            try {
-                senku.log(`❕ ${cookieName} readTime - response: ${JSON.stringify(response)}`)
-                signinfo.readTime = JSON.parse(data)
-                let subTitle = ''
-                let detail = ''
-                if (signinfo.readTime && signinfo.readTime.code == 0) {
-                    const coin = signinfo.readTime.data.coin
-                    const readTotalMinute = signinfo.readTime.data.readTotalMinute
-                    coin == 0 ? detail += `` : detail += `【阅读时长】获得${coin}💰`
-                    if (readTotalMinute % 40 == 0) {
-                        detail += ` 阅读时长${readTotalMinute}分钟\n`
-                        senku.msg(cookieName, subTitle, detail)
-                    }
-                } else if (signinfo.readTime.code != 0) {
-                    detail += `【阅读时长】错误代码${signinfo.readTime.code},错误信息${signinfo.readTime.message}\n`
-                    senku.msg(cookieName, subTitle, detail)
-                } else {
-                    detail += '【阅读时长】失败\n'
-                    senku.msg(cookieName, subTitle, detail)
-                }
-                resolve()
-            } catch (e) {
-                senku.msg(cookieName, `阅读时长: 失败`, `说明: ${e}`)
-                senku.log(`❌ ${cookieName} readTime - 签到失败: ${e}`)
-                senku.log(`❌ ${cookieName} readTime - response: ${JSON.stringify(response)}`)
-                resolve()
-            }
-        })
-    })
-}
 
 function showmsg() {
     let subTitle = ''
@@ -231,7 +190,7 @@ function showmsg() {
     if (signinfo.addnumList.length > 0) {
         detail += `【骰子次数】增加${signinfo.addnumList.length}次\n`
     } else {
-        detail += `【骰子次数】增加失败\n`
+        detail += `【骰子次数】无次数增加\n`
     }
     // 掷骰子
     if (signinfo.rollList.length > 0) {
@@ -241,7 +200,7 @@ function showmsg() {
             roll.code == 0 ? detail += `【骰子奖励】第${i}次获得${roll.data.roll_coin}💰\n` : detail += ``
         }
     } else {
-        detail += `【骰子奖励】获取失败\n`
+        detail += `【骰子奖励】无次数掷骰子\n`
     }
     senku.msg(cookieName, subTitle, detail)
     senku.done()
