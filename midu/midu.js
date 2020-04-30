@@ -3,25 +3,16 @@
 // 农妇山泉 -> 有点咸
 
 const cookieName = '米读'
-const readTimeurlKey = 'senku_readTimeurl_midu'
-const readTimeheaderKey = 'senku_readTimeheader_midu'
 const readTimebodyKey = 'senku_readTimebody_midu'
-
-const signurlKey = 'senku_signurl_midu'
-const signheaderKey = 'senku_signheader_midu'
 const signbodyKey = 'senku_signbody_midu'
 const senku = init()
-// 阅读
-const readTimeurlVal = senku.getdata(readTimeurlKey)
-const readTimeheaderVal = senku.getdata(readTimeheaderKey)
-const readTimebodyVal = senku.getdata(readTimebodyKey)
-// 签到
-const signurlVal = senku.getdata(signurlKey)
-const signheaderVal = senku.getdata(signheaderKey)
 const signbodyVal = senku.getdata(signbodyKey)
+const readTimebodyVal = senku.getdata(readTimebodyKey)
+const readTimeurlVal = '' + readTimebodyKey
+const signurlVal = 'https://apiwz.midukanshu.com/wz/task/signInV2' + signbodyKey
 const signinfo = {}
-let subTitle = ''
-let detail = ''
+senku.log(`🍎bodyVal${readTimebodyVal}`)
+
     ; (sign = async () => {
         senku.log(`🔔 ${cookieName}`)
         await readTime()
@@ -36,60 +27,71 @@ let detail = ''
 // 每日签到
 function sign() {
     return new Promise((resolve, reject) => {
-        const url = { url: signurlVal, headers: JSON.parse(signheaderVal), body: signbodyVal }
-        senku.post(url, (error, response, data) => {
-            try {
-                senku.log(`❕ ${cookieName} sign - response: ${JSON.stringify(response)}`)
-                signinfo.sign = JSON.parse(data)
-                resolve()
-            } catch (e) {
-                senku.msg(cookieName, `签到结果: 失败`, `说明: ${e}`)
-                senku.log(`❌ ${cookieName} sign - 签到失败: ${e}`)
-                senku.log(`❌ ${cookieName} sign - response: ${JSON.stringify(response)}`)
-                resolve()
-            }
-        })
+        setTimeout(() => {
+            const url = { url: signurlVal, headers: {}, body: {} }
+            url.headers['Host'] = 'apiwz.midukanshu.com'
+            url.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+            url.headers['User-Agent'] = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148'
+            senku.post(url, (error, response, data) => {
+                try {
+                    senku.log(`❕ ${cookieName} sign - response: ${JSON.stringify(response)}`)
+                    signinfo.sign = JSON.parse(data)
+                    resolve()
+                } catch (e) {
+                    senku.msg(cookieName, `签到结果: 失败`, `说明: ${e}`)
+                    senku.log(`❌ ${cookieName} sign - 签到失败: ${e}`)
+                    senku.log(`❌ ${cookieName} sign - response: ${JSON.stringify(response)}`)
+                    resolve()
+                }
+            })
+        }, 5000)
     })
 }
 
 // 阅读时长
 function readTime() {
     return new Promise((resolve, reject) => {
-        const url = { url: readTimeurlVal, headers: JSON.parse(readTimeheaderVal), body: readTimebodyVal }
-        senku.post(url, (error, response, data) => {
-            try {
-                senku.log(`❕ ${cookieName} readTime - response: ${JSON.stringify(response)}`)
-                signinfo.readTime = JSON.parse(data)
-                if (signinfo.readTime && signinfo.readTime.code == 0) {
-                    const coin = signinfo.readTime.data.coin
-                    const readTotalMinute = signinfo.readTime.data.readTotalMinute
-                    coin == 0 ? detail += `` : detail += `【阅读时长】获得${coin}💰`
-                    if (readTotalMinute % 40 == 0) {
-                        detail += ` 阅读时长${readTotalMinute}分钟\n`
+        setTimeout(() => {
+            const url = { url: readTimeurlVal, headers: {}, body: {} }
+            url.headers['Host'] = 'apiwz.midukanshu.com'
+            url.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+            url.headers['User-Agent'] = 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148'
+            senku.post(url, (error, response, data) => {
+                try {
+                    senku.log(`❕ ${cookieName} readTime - response: ${JSON.stringify(response)}`)
+                    signinfo.readTime = JSON.parse(data)
+                    let subTitle = ''
+                    let detail = ''
+                    if (signinfo.readTime && signinfo.readTime.code == 0) {
+                        const coin = signinfo.readTime.data.coin
+                        const readTotalMinute = signinfo.readTime.data.readTotalMinute
+                        coin == 0 ? detail += `` : detail += `【阅读时长】获得${coin}💰`
+                        if (readTotalMinute % 40 == 0) {
+                            detail += ` 阅读时长${readTotalMinute}分钟\n`
+                            senku.msg(cookieName, subTitle, detail)
+                        }
+                    } else if (signinfo.readTime.code != 0) {
+                        detail += `【阅读时长】错误代码${signinfo.readTime.code},错误信息${signinfo.readTime.message}\n`
+                        senku.msg(cookieName, subTitle, detail)
+                    } else {
+                        detail += '【阅读时长】失败\n'
                         senku.msg(cookieName, subTitle, detail)
                     }
-                } else if (signinfo.readTime.code != 0) {
-                    detail += `【阅读时长】错误代码${signinfo.readTime.code},错误信息${signinfo.readTime.message}\n`
-                    senku.msg(cookieName, subTitle, detail)
-                } else {
-                    detail += '【阅读时长】失败\n'
-                    senku.msg(cookieName, subTitle, detail)
+                    resolve()
+                } catch (e) {
+                    senku.msg(cookieName, `阅读时长: 失败`, `说明: ${e}`)
+                    senku.log(`❌ ${cookieName} readTime - 签到失败: ${e}`)
+                    senku.log(`❌ ${cookieName} readTime - response: ${JSON.stringify(response)}`)
+                    resolve()
                 }
-                resolve()
-            } catch (e) {
-                senku.msg(cookieName, `阅读时长: 失败`, `说明: ${e}`)
-                senku.log(`❌ ${cookieName} readTime - 签到失败: ${e}`)
-                senku.log(`❌ ${cookieName} readTime - response: ${JSON.stringify(response)}`)
-                resolve()
-            }
-        })
+            })
+        }, 5000)
     })
 }
 
 function showmsg() {
-    subTitle += ''
-    detail += ''
-
+    let subTitle = ''
+    let detail = ''
     if (signinfo.sign && signinfo.sign.code == 0) {
         if (signinfo.sign.data) {
             const amount = signinfo.sign.data.amount
