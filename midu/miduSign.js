@@ -5,7 +5,6 @@ const cookieName = '米读'
 const signbodyKey = 'senku_signbody_midu'
 const senku = init()
 const signbodyVal = senku.getdata(signbodyKey)
-const readTimeurlVal = 'https://apiwz.midukanshu.com/user/readTimeBase/readTime?' + readTimebodyVal
 const signurlVal = 'https://apiwz.midukanshu.com/wz/task/signInV2?' + signbodyVal
 const signVideourlVal = 'https://apiwz.midukanshu.com/wz/task/signVideoReward?' + signbodyVal
 const dice_index_urlVal = 'https://apiwz.midukanshu.com/wz/dice/index?' + signbodyVal
@@ -90,7 +89,7 @@ function dice_double() {
         senku.post(url, (error, response, data) => {
             try {
                 senku.log(`❕ ${cookieName} dice_double - response: ${JSON.stringify(response)}`)
-                signinfo.doubleList.push(SON.parse(data))
+                signinfo.doubleList.push(JSON.parse(data))
                 resolve()
             } catch (e) {
                 senku.msg(cookieName, `骰子双倍奖励: 失败`, `说明: ${e}`)
@@ -200,7 +199,7 @@ function showmsg() {
             roll.code == 0 ? detail += `【骰子奖励】第${i}次获得${roll.data.roll_coin}💰\n` : detail += ``
         }
     } else {
-        detail += `【骰子奖励】无次数掷骰子\n`
+        detail += `【骰子奖励】无次数掷骰子`
     }
     senku.msg(cookieName, subTitle, detail)
     senku.done()

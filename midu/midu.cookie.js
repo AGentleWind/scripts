@@ -1,15 +1,51 @@
 const cookieName = '米读'
+
 const readTimebodyKey = 'senku_readTimebody_midu'
+// 账号一
 const readTimeheaderKey = 'senku_readTimeheader_midu'
 const signbodyKey = 'senku_signbody_midu'
+// 账号二
+const readTimeheaderKey2 = 'senku_readTimeheader_midu2'
+const signbodyKey2 = 'senku_signbody_midu2'
 const senku = init()
 
 const requrl = $request.url
 
 if ($request && $request.method != 'OPTIONS' && requrl.match(/\/user\/readTimeBase\/readTime/)) {
     try {
+
         const readTimebodyVal = $request.body
-        const readTimeheaderVal = JSON.stringify($request.headers)
+        const CookieValue = $request.headers
+        const account = senku.getdata(readTimeheaderKey) ? senku.getdata(readTimeheaderKey)['token'] : null
+        const account2 = senku.getdata(readTimeheaderKey2) ? senku.getdata(readTimeheaderKey2)['token'] : null
+        if (!account) {
+            var CookieName = '【账号一】'
+            var CookieKey = 'senku_readTimeheader_midu'
+        } else if (!account2) {
+            var CookieName = '【账号二】'
+            var CookieKey = 'senku_readTimeheader_midu2'
+        } else {
+            senku.msg("更新米读阅读Cookie失败", "非历史写入账号 ‼️", '')
+        }
+
+        if (senku.getdata(CookieKey)['token']) {
+            if (senku.getdata(CookieKey)['token'] != CookieValue['token']) {
+                var cookie = senku.setdata(CookieValue, CookieKey);
+                if (!cookie) {
+                    senku.msg("米读阅读", "", "更新" + CookieName + "Cookie失败 ‼️");
+                } else {
+                    senku.msg("米读阅读", "", "更新" + CookieName + "Cookie成功 🎉");
+                }
+            }
+        } else {
+            var cookie = senku.setdata(CookieValue, CookieKey);
+            if (!cookie) {
+                senku.msg("米读阅读", "", "首次写入" + CookieName + "Cookie失败 ‼️");
+            } else {
+                senku.msg("米读阅读", "", "首次写入" + CookieName + "Cookie成功 🎉");
+            }
+        }
+
         if (readTimebodyVal) {
             if (readTimebodyVal.indexOf('EncStr=') > 0) {
                 senku.setdata(readTimebodyVal, readTimebodyKey)
