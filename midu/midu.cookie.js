@@ -1,55 +1,29 @@
-const cookieName = '米读'
-
 const readTimebodyKey = 'senku_readTimebody_midu'
 // 账号一
-const readTimeheaderKey = 'senku_readTimeheader_midu'
 const signbodyKey = 'senku_signbody_midu'
 // 账号二
-const readTimeheaderKey2 = 'senku_readTimeheader_midu2'
 const signbodyKey2 = 'senku_signbody_midu2'
 const senku = init()
-
+const DeleteCookie = false
 const requrl = $request.url
 
+if (DeleteCookie) {
+    if (senku.getdata(signbodyKey)) {
+        senku.setdata("", "senku_signbody_midu")
+        senku.setdata("", "senku_signbody_midu2")
+        senku.setdata("", "tokenMidu")
+        senku.setdata("", "tokenMidu2")
+        senku.msg("米读Cookie清除成功 !", "", '请手动关闭脚本内"DeleteCookie"选项')
+    } else {
+        senku.msg("米读->签到无可清除的Cookie !", "", '请手动关闭脚本内"DeleteCookie"选项')
+    }
+}
 if ($request && $request.method != 'OPTIONS' && requrl.match(/\/user\/readTimeBase\/readTime/)) {
     try {
-
         const readTimebodyVal = $request.body
-        const CookieValue = $request.headers
-        const account = senku.getdata(readTimeheaderKey) ? senku.getdata(readTimeheaderKey)['token'] : null
-        const account2 = senku.getdata(readTimeheaderKey2) ? senku.getdata(readTimeheaderKey2)['token'] : null
-        if (!account) {
-            var CookieName = '【账号一】'
-            var CookieKey = 'senku_readTimeheader_midu'
-        } else if (!account2) {
-            var CookieName = '【账号二】'
-            var CookieKey = 'senku_readTimeheader_midu2'
-        } else {
-            senku.msg("更新米读阅读Cookie失败", "非历史写入账号 ‼️", '')
-        }
-
-        if (senku.getdata(CookieKey)['token']) {
-            if (senku.getdata(CookieKey)['token'] != CookieValue['token']) {
-                var cookie = senku.setdata(CookieValue, CookieKey);
-                if (!cookie) {
-                    senku.msg("米读阅读", "", "更新" + CookieName + "Cookie失败 ‼️");
-                } else {
-                    senku.msg("米读阅读", "", "更新" + CookieName + "Cookie成功 🎉");
-                }
-            }
-        } else {
-            var cookie = senku.setdata(CookieValue, CookieKey);
-            if (!cookie) {
-                senku.msg("米读阅读", "", "首次写入" + CookieName + "Cookie失败 ‼️");
-            } else {
-                senku.msg("米读阅读", "", "首次写入" + CookieName + "Cookie成功 🎉");
-            }
-        }
-
         if (readTimebodyVal) {
             if (readTimebodyVal.indexOf('EncStr=') > 0) {
                 senku.setdata(readTimebodyVal, readTimebodyKey)
-                senku.setdata(readTimeheaderVal, readTimeheaderKey)
                 senku.msg(cookieName, `阅读时长,获取Cookie: 成功`, ``)
                 senku.log(`🔔${readTimeheaderVal}`)
             }
@@ -61,11 +35,42 @@ if ($request && $request.method != 'OPTIONS' && requrl.match(/\/user\/readTimeBa
 
 if ($request && $request.method != 'OPTIONS' && requrl.match(/\/wz\/task\/listV2/)) {
     try {
-        const signbodyVal = $request.body
-        if (signbodyVal) {
-            senku.setdata(signbodyVal, signbodyKey)
-            senku.msg(cookieName, `签到,获取Cookie: 成功`, ``)
-            senku.log(`🔔${signbodyVal}`)
+        const CookieValue = $request.body
+        const account = senku.getdata(signbodyKey) ? senku.getdata(signbodyKey).match(/token=[a-zA-Z0-9._-]+/)[0] : null
+        const account2 = senku.getdata(signbodyKey) ? senku.getdata(signbodyKey).match(/token=[a-zA-Z0-9._-]+/)[0] : null
+        const tokenVal = CookieValue.match(/token=[a-zA-Z0-9._-]+/)[0]
+        if (!account || tokenVal == account) {
+            var CookieName = '【账号一】'
+            var CookieKey = 'senku_signbody_midu'
+            var tokenKey = 'tokenMidu'
+        } else if (!account2 || tokenVal == account2) {
+            var CookieName = '【账号二】'
+            var CookieKey = 'senku_signbody_midu2'
+            var tokenKey = 'tokenMidu2'
+        } else {
+            senku.msg("米读", "更新米读->签到Cookie失败", '非历史写入账号 ‼️')
+        }
+        senku.log(`🍎${senku.getdata(tokenKey)}`)
+        if (senku.getdata(tokenKey)) {
+            if (senku.getdata(tokenKey) != tokenVal) {
+                var token = senku.setdata(tokenVal.substring(6, tokenVal.length), tokenKey)
+                var body = senku.setdata(CookieValue, CookieKey)
+                senku.log(`🍎${tokenVal}`)
+                if (!body && !token) {
+                    senku.msg("米读", "签到", "更新" + CookieName + "Cookie失败 ‼️")
+                } else {
+                    senku.msg("米读", "签到", "更新" + CookieName + "Cookie成功 🎉")
+                }
+            }
+        } else {
+            var token = senku.setdata(tokenVal.substring(6, tokenVal.length), tokenKey)
+            var body = senku.setdata(CookieValue, CookieKey)
+            senku.log(`🍎${tokenVal}`)
+            if (!body && !token) {
+                senku.msg("米读", "签到", "首次写入" + CookieName + "Cookie失败 ‼️")
+            } else {
+                senku.msg("米读", "签到", "首次写入" + CookieName + "Cookie成功 🎉")
+            }
         }
     } catch (error) {
         senku.log(`❌error:${error}`)
