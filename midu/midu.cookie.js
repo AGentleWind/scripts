@@ -37,7 +37,7 @@ if ($request && $request.method != 'OPTIONS' && requrl.match(/\/wz\/task\/listV2
     try {
         const CookieValue = $request.body
         const account = senku.getdata(signbodyKey) ? senku.getdata(signbodyKey).match(/token=[a-zA-Z0-9._-]+/)[0] : null
-        const account2 = senku.getdata(signbodyKey) ? senku.getdata(signbodyKey).match(/token=[a-zA-Z0-9._-]+/)[0] : null
+        const account2 = senku.getdata(signbodyKey2) ? senku.getdata(signbodyKey2).match(/token=[a-zA-Z0-9._-]+/)[0] : null
         const tokenVal = CookieValue.match(/token=[a-zA-Z0-9._-]+/)[0]
         if (!account || tokenVal == account) {
             var CookieName = '【账号一】'
