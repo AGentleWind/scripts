@@ -27,13 +27,20 @@ const signinfo = {}
 const DeleteCookie = false
 
 // 开启debug模式,每次脚本执行会显示通知,默认false
-const debug = flase
+const debug = false
 senku.log(`🍎${readTimeheaderVal}`)
 senku.log(`🍎${readTimeheaderVal2}`)
 if (DeleteCookie) {
     if (token) {
+        senku.setdata("", 'senku_readTimeheader_midu')
+        senku.setdata("", 'senku_readTimeheader_midu2')
+
+        senku.setdata("", 'senku_signbody_midu')
+        senku.setdata("", 'senku_signbody_midu2')
+
         senku.setdata("", "tokenMidu_read")
         senku.setdata("", "tokenMidu_read2")
+
         senku.setdata("", "tokenMidu_sign")
         senku.setdata("", "tokenMidu_sign2")
         senku.msg("米读 Cookie清除成功 !", "", '请手动关闭脚本内"DeleteCookie"选项')
