@@ -3,40 +3,65 @@
 // 农妇山泉 -> 有点咸
 
 const cookieName = '米读阅读时长'
-const readTimebodyKey = 'senku_readTimebody_midu'
 // 账号一
+const readTimeheaderKey = 'senku_readTimeheader_midu'
 const signbodyKey = 'senku_signbody_midu'
+const tokenKey = 'tokenMidu_read'
 // 账号二
+const readTimeheaderKey2 = 'senku_readTimeheader_midu2'
 const signbodyKey2 = 'senku_signbody_midu2'
-const tokenKey = 'tokenMidu'
-const tokenKey2 = 'tokenMidu2'
+const tokenKey2 = 'tokenMidu_read2'
 
 const senku = init()
-const readTimebodyVal = senku.getdata(readTimebodyKey)
+const readTimebodyVal = senku.getdata('senku_readTimebody_midu')
+const readTimebodyVal2 = senku.getdata('senku_readTimebody_midu2')
+const readTimeheaderVal = senku.getdata(readTimeheaderKey)
+const readTimeheaderVal2 = senku.getdata(readTimeheaderKey2)
 const token = senku.getdata(tokenKey)
 const token2 = senku.getdata(tokenKey2)
 const readTimeurlVal = 'https://apiwz.midukanshu.com/user/readTimeBase/readTime?' + readTimebodyVal
+const readTimeurlVal2 = 'https://apiwz.midukanshu.com/user/readTimeBase/readTime?' + readTimebodyVal2
 const signinfo = {}
-    ; (sign = async () => {
-        senku.log(`🔔 ${cookieName}`)
-        if (token) {
-            await readTime(token, '账号一')
-        }
-        if (token2) {
-            await readTime(token2, '账号二')
-        }
-        senku.done()
-    })().catch((e) => senku.log(`❌ ${cookieName} 签到失败: ${e}`), senku.done())
+
+// 清除Cookie,将下方改为true,默认false
+const DeleteCookie = false
+// 开启debug模式,每次脚本执行会显示通知,默认false
+const debug = flase
+senku.log(`🍎${readTimeheaderVal}`)
+senku.log(`🍎${readTimeheaderVal2}`)
+if (DeleteCookie) {
+    if (token) {
+        senku.setdata("", "tokenMidu_read")
+        senku.setdata("", "tokenMidu_read2")
+        senku.setdata("", "tokenMidu_sign")
+        senku.setdata("", "tokenMidu_sign2")
+        senku.msg("米读 Cookie清除成功 !", "", '请手动关闭脚本内"DeleteCookie"选项')
+    } else {
+        senku.msg("米读 无可清除的Cookie !", "", '请手动关闭脚本内"DeleteCookie"选项')
+    }
+}
+debug ? senku.setdata('true', 'debug') : senku.setdata('false', 'debug')
+
+;
+(sign = async () => {
+    senku.log(`🔔 ${cookieName},token:${token} token2:${token2}`)
+    if (token) {
+        await readTime(readTimeheaderVal, readTimeurlVal, '账号一')
+    }
+    if (token2) {
+        await readTime(readTimeheaderVal2, readTimeurlVal2, '账号二')
+    }
+    senku.done()
+})().catch((e) => senku.log(`❌ ${cookieName} 签到失败: ${e}`), senku.done())
 
 
 // 阅读时长
-function readTime(tkPara, account) {
+function readTime(header, urlVal, account) {
     return new Promise((resolve, reject) => {
-        const url = { url: readTimeurlVal, headers: {} }
-        url.headers['token'] = tkPara
-        url.headers['Host'] = 'apiwz.midukanshu.com'
-        url.headers['Content-Type'] = 'application/x-www-form-urlencoded ;charset=utf-8'
-        url.headers['User-Agent'] = 'MRSpeedNovel/0423.1424 CFNetwork/1125.2 Darwin/19.5.0'
+        const url = {
+            url: urlVal,
+            headers: JSON.parse(header)
+        }
         senku.post(url, (error, response, data) => {
             try {
                 senku.log(`❕ ${cookieName} readTime - response: ${JSON.stringify(response)}`)
@@ -46,16 +71,20 @@ function readTime(tkPara, account) {
                 if (signinfo.readTime && signinfo.readTime.code == 0) {
                     const coin = signinfo.readTime.data.coin
                     const readTotalMinute = signinfo.readTime.data.readTotalMinute
+                    const total_coin = signinfo.readTime.data.total_coin
                     coin == 0 ? detail += `` : detail += `【阅读时长】获得${coin}💰`
                     if (readTotalMinute % 20 == 0) {
-                        readTotalMinute ? detail += ` 阅读时长${readTotalMinute / 2}分钟\n` : detail += ``
+                        readTotalMinute ? detail += ` 阅读时长${readTotalMinute / 2}分钟,该账户:${total_coin}💰` : detail += `该账户:${total_coin}💰`
+                        senku.msg(cookieName, account + subTitle, detail)
+                    } else if (senku.getdata('debug') == 'true') {
+                        readTotalMinute ? detail += ` 阅读时长${readTotalMinute / 2}分钟,该账户:${total_coin}💰` : detail += `该账户:${total_coin}💰`
                         senku.msg(cookieName, account + subTitle, detail)
                     }
                 } else if (signinfo.readTime.code != 0) {
-                    detail += `【阅读时长】错误代码${signinfo.readTime.code},错误信息${signinfo.readTime.message}\n`
+                    detail += `【阅读时长】错误代码${signinfo.readTime.code},错误信息${signinfo.readTime.message}`
                     senku.msg(cookieName, account + subTitle, detail)
                 } else {
-                    detail += '【阅读时长】失败\n'
+                    detail += '【阅读时长】失败'
                     senku.msg(cookieName, account + subTitle, detail)
                 }
                 resolve()
@@ -111,5 +140,15 @@ function init() {
     done = (value = {}) => {
         $done(value)
     }
-    return { isSurge, isQuanX, msg, log, getdata, setdata, get, post, done }
+    return {
+        isSurge,
+        isQuanX,
+        msg,
+        log,
+        getdata,
+        setdata,
+        get,
+        post,
+        done
+    }
 }
