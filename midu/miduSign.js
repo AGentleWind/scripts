@@ -23,6 +23,54 @@ const bind = true // 绑定作者邀请码,默认true,可更改为false
 const cookieName = '米读'
 const senku = init()
 
+if (DeleteCookie) {
+    const one = senku.getdata('tokenMidu_read')
+    const two = senku.getdata('tokenMidu_sign')
+    const three = senku.getdata('tokenMidu_read2')
+    const four = senku.getdata('tokenMidu_sign2')
+    if (DeleteCookieAll) {
+        if (one || two || three || four) {
+            senku.setdata("", 'senku_signbody_midu')
+            senku.setdata("", 'senku_signbody_midu2')
+            senku.setdata("", 'senku_readTimebody_midu')
+            senku.setdata("", 'senku_readTimebody_midu2')
+            senku.setdata("", 'senku_readTimeheader_midu')
+            senku.setdata("", 'senku_readTimeheader_midu2')
+            senku.setdata("", "tokenMidu_read")
+            senku.setdata("", "tokenMidu_read2")
+            senku.setdata("", "tokenMidu_sign")
+            senku.setdata("", "tokenMidu_sign2")
+            senku.msg("米读 Cookie清除成功 !", "", '请手动关闭脚本内"DeleteCookie"选项')
+        } else {
+            senku.msg("米读 无可清除的Cookie !", "", '请手动关闭脚本内"DeleteCookie"选项')
+        }
+    } else if (DeleteCookieOne) {
+        if (one || two) {
+            senku.setdata("", 'senku_signbody_midu')
+            senku.setdata("", 'senku_readTimebody_midu')
+            senku.setdata("", 'senku_readTimeheader_midu')
+            senku.setdata("", "tokenMidu_read")
+            senku.setdata("", "tokenMidu_sign")
+            senku.msg("米读 Cookie清除成功 !", "清除账户一选项", '请手动关闭脚本内"DeleteCookie"选项')
+        } else {
+            senku.msg("米读 无可清除的Cookie !", "清除账户一选项", '请手动关闭脚本内"DeleteCookie"选项')
+        }
+    } else if (DeleteCookieTwo) {
+        if (three || four) {
+            senku.setdata("", 'senku_signbody_midu2')
+            senku.setdata("", 'senku_readTimebody_midu2')
+            senku.setdata("", 'senku_readTimeheader_midu2')
+            senku.setdata("", "tokenMidu_read2")
+            senku.setdata("", "tokenMidu_sign2")
+            senku.msg("米读 Cookie清除成功 !", "清除账户二选项", '请手动关闭脚本内"DeleteCookie"选项')
+        } else {
+            senku.msg("米读 无可清除的Cookie !", "清除账户二选项", '请手动关闭脚本内"DeleteCookie"选项')
+        }
+    } else {
+        senku.msg("米读 清除Cookie !", "未选取任何选项", '请手动关闭脚本内"DeleteCookie"选项')
+    }
+}
+
 function initial() {
     signinfo = {
         addnumList: [],
@@ -31,7 +79,10 @@ function initial() {
     }
 }
 
-bind ? '' : senku.setdata('', 'bind');;
+bind ? '' : senku.setdata('', 'bind')
+
+
+;
 (sign = () => {
     senku.log(`🔔 ${cookieName}`)
     senku.getdata('tokenMidu_sign') ? '' : senku.msg('米读签到', '', '不存在Cookie')
@@ -43,7 +94,7 @@ bind ? '' : senku.setdata('', 'bind');;
         signbodyVal = senku.getdata('senku_signbody_midu')
         all()
     }
-})().catch((e) => senku.log(`❌ ${cookieName} 签到失败: ${e}`), senku.done())
+})()
 
 async function all() {
     try {
@@ -74,13 +125,13 @@ async function all() {
         if (senku.getdata('bind')) {
             await Bind()
         }
-        await showmsg()
+        // await showmsg()
         senku.done()
     } catch (e) {
         senku.msg(cookieName, `失败`, `说明: ${e}`)
         senku.log(`❌ ${cookieName}  - 失败: ${e}`)
+        senku.done()
     }
-
 }
 
 function double() {
@@ -345,53 +396,7 @@ function showmsg() {
     })
 }
 
-if (DeleteCookie) {
-    const one = senku.getdata('tokenMidu_read')
-    const two = senku.getdata('tokenMidu_sign')
-    const three = senku.getdata('tokenMidu_read2')
-    const four = senku.getdata('tokenMidu_sign2')
-    if (DeleteCookieAll) {
-        if (one || two || three || four) {
-            senku.setdata("", 'senku_signbody_midu')
-            senku.setdata("", 'senku_signbody_midu2')
-            senku.setdata("", 'senku_readTimebody_midu')
-            senku.setdata("", 'senku_readTimebody_midu2')
-            senku.setdata("", 'senku_readTimeheader_midu')
-            senku.setdata("", 'senku_readTimeheader_midu2')
-            senku.setdata("", "tokenMidu_read")
-            senku.setdata("", "tokenMidu_read2")
-            senku.setdata("", "tokenMidu_sign")
-            senku.setdata("", "tokenMidu_sign2")
-            senku.msg("米读 Cookie清除成功 !", "", '请手动关闭脚本内"DeleteCookie"选项')
-        } else {
-            senku.msg("米读 无可清除的Cookie !", "", '请手动关闭脚本内"DeleteCookie"选项')
-        }
-    } else if (DeleteCookieOne) {
-        if (one || two) {
-            senku.setdata("", 'senku_signbody_midu')
-            senku.setdata("", 'senku_readTimebody_midu')
-            senku.setdata("", 'senku_readTimeheader_midu')
-            senku.setdata("", "tokenMidu_read")
-            senku.setdata("", "tokenMidu_sign")
-            senku.msg("米读 Cookie清除成功 !", "清除账户一选项", '请手动关闭脚本内"DeleteCookie"选项')
-        } else {
-            senku.msg("米读 无可清除的Cookie !", "清除账户一选项", '请手动关闭脚本内"DeleteCookie"选项')
-        }
-    } else if (DeleteCookieTwo) {
-        if (three || four) {
-            senku.setdata("", 'senku_signbody_midu2')
-            senku.setdata("", 'senku_readTimebody_midu2')
-            senku.setdata("", 'senku_readTimeheader_midu2')
-            senku.setdata("", "tokenMidu_read2")
-            senku.setdata("", "tokenMidu_sign2")
-            senku.msg("米读 Cookie清除成功 !", "清除账户二选项", '请手动关闭脚本内"DeleteCookie"选项')
-        } else {
-            senku.msg("米读 无可清除的Cookie !", "清除账户二选项", '请手动关闭脚本内"DeleteCookie"选项')
-        }
-    } else {
-        senku.msg("米读 清除Cookie !", "未选取任何选项", '请手动关闭脚本内"DeleteCookie"选项')
-    }
-}
+
 
 function init() {
     isSurge = () => {

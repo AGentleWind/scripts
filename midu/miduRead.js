@@ -115,9 +115,9 @@ async function all() {
         await prizeInfo(key)
         if (signinfo.prizeInfo && signinfo.prizeInfo.data && signinfo.prizeInfo.data.total_num) {
             await prizeTask(key)
-            // await drawPrize(key)
+            await drawPrize(key)
         }
-        await showmsg()
+        // await showmsg()
         senku.done()
     } catch (e) {
         senku.msg(cookieName, `失败`, `说明: ${e}`)
@@ -304,8 +304,8 @@ function showmsg() {
 
         // 大转盘抽手机
         if (signinfo.drawPrize) {
-            if (signinfo.drawPrize.code == 0 && drawPrize.data && drawPrize.data.index) {
-                drawPrize.data.index >= 0 ? detail += `【转盘奖励】本次${drawPrize.data.title}\n` : detail += ``
+            if (signinfo.drawPrize.code == 0) {
+                detail += `【转盘奖励】本次${drawPrize.data.title}\n`
             } else {
                 detail += `【转盘奖励】无次数抽奖`
             }
