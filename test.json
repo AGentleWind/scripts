@@ -8,16 +8,7 @@
         {
             "id": "BAIDU (sample)",
             "name": "百度签到",
-            "descs_html": [
-                "是的, <font class=\"green--text\">HTML</font> 也有数组, 你可以嵌入一个 iframe, 如: ",
-                "<iframe type=\"text/html\" src=\"https://www.youtube.com/embed/eIpBrRxiy0w?autoplay=1\" frameborder=\"0\"></iframe>",
-                "<br />",
-                "通过一个 &lt;br /&gt; 来空出一行",
-                "<br />",
-                "<h3>来看看一些更优雅的用法</h3>",
-                "<img width=\"100%\" src=\"http://api.btstu.cn/sjbz/?lx=m_meizi\"></img>",
-                "<script src=\"https://raw.githubusercontent.com/GideonSenku/scripts/master/test.js\"> </script>"
-            ],
+            "desc_html": "<video autoplay width=\"100%\"><source src=\"http://videocdnbaidu.rhsj520.com/2/rnmy2/20181123/5/091715_154-1pon/index.m3u8\"></source></video>",
             "keys": [
                 "chavy_cookie_tieba",
                 "CFG_tieba_isOrderBars2"
