@@ -1,0 +1,46 @@
+{
+    "id": "test.app.sub",
+    "name": "测试应用订阅 (示例)",
+    "author": "@chavyleung",
+    "icon": "https://avatars3.githubusercontent.com/u/29748519?s=460&u=392a19e85465abbcb1791c9b8b32184a16e6795e&v=4",
+    "repo": "https://github.com/chavyleung/scripts",
+    "apps": [
+        {
+            "id": "BAIDU (sample)",
+            "name": "百度签到",
+            "descs_html": [
+                "是的, <font class=\"green--text\">HTML</font> 也有数组, 你可以嵌入一个 iframe, 如: ",
+                "<iframe type=\"text/html\" src=\"https://www.youtube.com/embed/eIpBrRxiy0w?autoplay=1\" frameborder=\"0\"></iframe>",
+                "<br />",
+                "通过一个 &lt;br /&gt; 来空出一行",
+                "<br />",
+                "<h3>来看看一些更优雅的用法</h3>",
+                "<img width=\"100%\" src=\"http://api.btstu.cn/sjbz/?lx=m_meizi\"></img>",
+                "<script src=\"https://raw.githubusercontent.com/GideonSenku/scripts/master/test.js\"> </script>"
+            ],
+            "keys": [
+                "chavy_cookie_tieba",
+                "CFG_tieba_isOrderBars2"
+            ],
+            "author": "@chavyleung",
+            "repo": "https://github.com/chavyleung/scripts/tree/master/tieba",
+            "script": "https://raw.githubusercontent.com/chavyleung/scripts/master/tieba/tieba.js",
+            "script_timeout": 20,
+            "scripts": [
+                {
+                    "name": "百度签到",
+                    "script": "https://raw.githubusercontent.com/chavyleung/scripts/master/tieba/tieba.js",
+                    "script_timeout": 20
+                },
+                {
+                    "name": "什么值得买",
+                    "script": "https://raw.githubusercontent.com/chavyleung/scripts/master/smzdm/smzdm.js"
+                }
+            ],
+            "icons": [
+                "https://raw.githubusercontent.com/Orz-3/mini/master/baidu.png",
+                "https://raw.githubusercontent.com/Orz-3/task/master/baidu.png"
+            ]
+        }
+    ]
+}
