@@ -1,72 +1,44 @@
 {
     "id": "test.app.sub",
     "name": "测试应用订阅 (示例)",
-    "author": "@chavyleung",
-    "icon": "https://avatars3.githubusercontent.com/u/29748519?s=460&u=392a19e85465abbcb1791c9b8b32184a16e6795e&v=4",
-    "repo": "https://github.com/chavyleung/scripts",
+    "author": "@gideonsenku",
+    "icon": "https://avatars1.githubusercontent.com/u/39037656?s=460&u=5843b86eae433868b6ade4ec23f8353fe7300df4&v=4",
+    "repo": "https://github.com/gideonsenku/scripts",
     "apps": [
         {
-            "id": "BAIDU (sample)",
-            "name": "百度签到",
-            "desc_html": "<video autoplay width=\"100%\"><source src=\"http://videocdnbaidu.rhsj520.com/2/rnmy2/20181123/5/091715_154-1pon/index.m3u8\"></source></video>",
-            "keys": [
-                "chavy_cookie_tieba",
-                "CFG_tieba_isOrderBars2"
+            "id": "bgimgSwitchr",
+            "name": "壁纸切换",
+            "keys": [],
+            "author": "@GideonSenku",
+            "repo": "https://github.com/chavyleung/scripts/tree/master/box/switcher",
+            "script": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/switcher/bgimg.switcher.js",
+            "icons": [
+                "https://raw.githubusercontent.com/chavyleung/scripts/master/box/icons/BoxSetting.mini.png",
+                "https://raw.githubusercontent.com/chavyleung/scripts/master/box/icons/BoxSetting.png"
             ],
-            "author": "@chavyleung",
-            "repo": "https://github.com/chavyleung/scripts/tree/master/tieba",
-            "script": "https://raw.githubusercontent.com/chavyleung/scripts/master/tieba/tieba.js",
-            "script_timeout": 20,
-            "scripts": [
+            "settings": [
                 {
-                    "name": "百度签到",
-                    "script": "https://raw.githubusercontent.com/chavyleung/scripts/master/tieba/tieba.js",
-                    "script_timeout": 20
+                    "id": "bgimg_url1",
+                    "name": "早上的壁纸",
+                    "val": "",
+                    "type": "text",
+                    "desc": "待切换壁纸"
                 },
                 {
-                    "name": "什么值得买",
-                    "script": "https://raw.githubusercontent.com/chavyleung/scripts/master/smzdm/smzdm.js"
+                    "id": "bgimg_url2",
+                    "name": "中午的壁纸",
+                    "val": "",
+                    "type": "text",
+                    "desc": "待切换壁纸"
+                },
+                {
+                    "id": "bgimg_url3",
+                    "name": "晚上的壁纸",
+                    "val": "",
+                    "type": "text",
+                    "desc": "待切换壁纸"
                 }
-            ],
-            "icons": [
-                "https://raw.githubusercontent.com/Orz-3/mini/master/baidu.png",
-                "https://raw.githubusercontent.com/Orz-3/task/master/baidu.png"
             ]
-        },
-        {
-          "id": "bgimgSwitchr",
-          "name": "壁纸切换",
-          "keys": [],
-          "author": "@GideonSenku",
-          "repo": "https://github.com/chavyleung/scripts/tree/master/box/switcher",
-          "script": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/switcher/bgimg.switcher.js",
-          "icons": [
-            "https://raw.githubusercontent.com/chavyleung/scripts/master/box/icons/BoxSetting.mini.png", 
-            "https://raw.githubusercontent.com/chavyleung/scripts/master/box/icons/BoxSetting.png"
-          ],
-          "settings": [
-            {
-              "id": "bgimg_url1",
-              "name": "早上的壁纸",
-              "val": "",
-              "type": "text",
-              "desc": "待切换壁纸"
-            },
-            {
-              "id": "bgimg_url2",
-              "name": "中午的壁纸",
-              "val": "",
-              "type": "text",
-              "desc": "待切换壁纸"
-            },
-            {
-              "id": "bgimg_url3",
-              "name": "晚上的壁纸",
-              "val": "",
-              "type": "text",
-              "desc": "待切换壁纸"
-            }
-          ]
-       }
+        }
     ]
 }
