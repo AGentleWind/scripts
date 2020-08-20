@@ -32,6 +32,41 @@
                 "https://raw.githubusercontent.com/Orz-3/mini/master/baidu.png",
                 "https://raw.githubusercontent.com/Orz-3/task/master/baidu.png"
             ]
-        }
+        },
+        {
+          "id": "bgimgSwitchr",
+          "name": "壁纸切换",
+          "keys": [],
+          "author": "@GideonSenku",
+          "repo": "https://github.com/chavyleung/scripts/tree/master/box/switcher",
+          "script": "https://raw.githubusercontent.com/chavyleung/scripts/master/box/switcher/bgimg.switcher.js",
+          "icons": [
+            "https://raw.githubusercontent.com/chavyleung/scripts/master/box/icons/BoxSetting.mini.png", 
+            "https://raw.githubusercontent.com/chavyleung/scripts/master/box/icons/BoxSetting.png"
+          ],
+          "settings": [
+            {
+              "id": "bgimg_url1",
+              "name": "早上的壁纸",
+              "val": "",
+              "type": "text",
+              "desc": "待切换壁纸"
+            },
+            {
+              "id": "bgimg_url2",
+              "name": "中午的壁纸",
+              "val": "",
+              "type": "text",
+              "desc": "待切换壁纸"
+            },
+            {
+              "id": "bgimg_url3",
+              "name": "晚上的壁纸",
+              "val": "",
+              "type": "text",
+              "desc": "待切换壁纸"
+            }
+          ]
+       },
     ]
 }
