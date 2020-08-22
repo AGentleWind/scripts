@@ -125,7 +125,11 @@ async function all() {
         if (senku.getdata('bind')) {
             await Bind()
         }
+<<<<<<< HEAD
         // await showmsg()
+=======
+        await showmsg()
+>>>>>>> 7899e798ffa29c947ba67a5a560b6c2b5d667931
         senku.done()
     } catch (e) {
         senku.msg(cookieName, `失败`, `说明: ${e}`)

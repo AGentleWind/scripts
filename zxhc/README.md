@@ -25,12 +25,24 @@ cron "10 0 0 * * *" script-path=https://raw.githubusercontent.com/chavyleung/scr
 m.ctrip.com
 
 [rewrite_local]
+<<<<<<< HEAD
 
 # QuanTF&QuanX
+=======
+#&QuanX
+^https:\/\/m\.ctrip\.com/restapi/soa2/14593/json/attendanceDay? url script-request-body chavyleung/zxhc/zxhc.cookie.js
+# QuanTF
+>>>>>>> 7899e798ffa29c947ba67a5a560b6c2b5d667931
 ^https:\/\/m\.ctrip\.com/restapi/soa2/14593/json/attendanceDay? url script-request-body https://raw.githubusercontent.com/chavyleung/scripts/master/zxhc/zxhc.cookie.js
 
 [task_local]
 1 0 * * * zxhc.js
+<<<<<<< HEAD
+=======
+
+[task_remote]
+1 0 * * * https://raw.githubusercontent.com/chavyleung/scripts/master/zxhc/zxhc.js
+>>>>>>> 7899e798ffa29c947ba67a5a560b6c2b5d667931
 ```
 
 ## 说明

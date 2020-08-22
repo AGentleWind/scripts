@@ -117,7 +117,11 @@ async function all() {
             await prizeTask(key)
             await drawPrize(key)
         }
+<<<<<<< HEAD
         // await showmsg()
+=======
+        await showmsg()
+>>>>>>> 7899e798ffa29c947ba67a5a560b6c2b5d667931
         senku.done()
     } catch (e) {
         senku.msg(cookieName, `失败`, `说明: ${e}`)
@@ -303,6 +307,7 @@ function showmsg() {
         }
 
         // 大转盘抽手机
+<<<<<<< HEAD
         if (signinfo.drawPrize) {
             if (signinfo.drawPrize.code == 0) {
                 detail += `【转盘奖励】本次${drawPrize.data.title}\n`
@@ -311,6 +316,16 @@ function showmsg() {
             }
             senku.msg(cookieName + ` 用户:${name}`, subTitle, detail)
         }
+=======
+        // if (signinfo.drawPrize) {
+        //     if (signinfo.drawPrize.code == 0) {
+        //         detail += `【转盘奖励】本次${drawPrize.data.title}\n`
+        //     } else {
+        //         detail += `【转盘奖励】无次数抽奖`
+        //     }
+        //     senku.msg(cookieName + ` 用户:${name}`, subTitle, detail)
+        // }
+>>>>>>> 7899e798ffa29c947ba67a5a560b6c2b5d667931
         if (DualAccount) double()
         resolve()
     })
